@@ -1,0 +1,15 @@
+<h1 mat-dialog-title style="width: 200px">City: {{data}}</h1>
+<div mat-dialog-content>
+  <p>Give The City Name...</p>
+  <mat-form-field style="width: 200px;">
+    <mat-label>City Name</mat-label>
+    <input matInput [(ngModel)]="data">
+    <button mat-button *ngIf="data" matSuffix mat-icon-button (click)="data=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data">Ok</button>
+</div>

@@ -1,0 +1,33 @@
+<span *ngIf="weatherInfo==undefined; else displayPanel">
+  <button class="btn btn-dark m-2" (click)="openChooseCityDialog()"> Choose </button>
+</span>
+
+<ng-template #displayPanel>
+  <mat-card class="panel-size bg-dark text-white m-2 rounded-lg">
+
+    <mat-card-header>
+        <div *ngIf="typeOfWeather" mat-card-avatar class="glow-the-{{typeOfWeather}}">
+          <img *ngIf="typeOfWeather" src="/assets/images/{{typeOfWeather}}.svg" alt="sun">
+        </div>
+
+        <mat-card-title>{{weatherInfo['cityName']}}</mat-card-title>
+
+        <mat-card-subtitle class="text-white">Temperature(In &#176;C)</mat-card-subtitle>
+    </mat-card-header>
+
+
+    <mat-card-content class="text-center">
+      <div class="font-weight-bolder display-3">&nbsp;{{weatherInfo['currentTemp']}}&#176;</div>
+      <div class="h4">{{weatherInfo['minTemp']}}&#176;/ {{weatherInfo['maxTemp']}}&#176;</div>
+      <div class="increase-font-2 p-2">{{typeOfWeather}}</div>
+      <div class="font-weight-bolder increase-font-1 p-2">Feels Like: {{weatherInfo['feelsLike']}}&#176;</div>
+      <div class="increase-font-1 font-weight-bolder">Humidity: {{weatherInfo['humidity']}}%</div>
+    </mat-card-content>
+
+    <mat-card-actions class="text-center">
+      <button mat-button class="w-25 text-center" (click)="openChooseCityDialog()">Change</button>
+      <button mat-button class="w-25" (click)="closeClicked()">Close</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+

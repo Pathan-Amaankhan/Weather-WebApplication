@@ -1,0 +1,29 @@
+.panel-size {
+  max-width: 400px;
+  min-width: 250px;
+}
+.glow-the-Sunny {
+  filter: drop-shadow(1px 1px 10px yellow);
+}
+
+.glow-the-Rainy{
+  filter: drop-shadow(1px 1px 10px #00b7ff);
+}
+
+.glow-the-Cloudy {
+  filter: drop-shadow(1px 1px 20px #fffd53);
+}
+
+.glow-the-Windy {
+  filter: drop-shadow(1px 1px 10px #00b7ff);
+}
+
+.increase-font-1 {
+  font-family: "Apple Color Emoji", serif;
+  font-size: large;
+}
+
+.increase-font-2 {
+  font-family: Loma, serif;
+  font-size: xx-large;
+}
