@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {interval, Subscription} from "rxjs";
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {interval, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-panel',
@@ -10,10 +10,10 @@ import {interval, Subscription} from "rxjs";
 })
 export class PanelComponent implements OnInit {
 
-  url: string = 'https://api.openweathermap.org/data/2.5/weather?';
-  apiKey: string = 'a44224604925b3f23115c403c8e9c7c0';
+  url = 'https://api.openweathermap.org/data/2.5/weather?';
+  apiKey = 'a44224604925b3f23115c403c8e9c7c0';
   weatherInfo = undefined;
-  cityName: string = '';
+  cityName = '';
   typeOfWeather: string;
   subscription: Subscription;
 
@@ -25,7 +25,7 @@ export class PanelComponent implements OnInit {
     this.http.get(this.url.concat(`q=${city}&appid=${apiKey}`)).subscribe(res => {
       this.fetchInfoFromData(res);
     }, error => {
-      if(isNotUpdating){
+      if (isNotUpdating){
         this.openErrorDialog();
       }
       console.clear();
@@ -33,9 +33,9 @@ export class PanelComponent implements OnInit {
   }
 
   tryToUpdate(){
-    if(this.weatherInfo!=undefined){
+    if (this.weatherInfo !== undefined){
       try{
-        this.getWeatherData(this.cityName, this.apiKey,false);
+        this.getWeatherData(this.cityName, this.apiKey, false);
       } catch (e) {
         console.clear();
       }
@@ -44,33 +44,31 @@ export class PanelComponent implements OnInit {
 
   fetchInfoFromData(data){
     this.weatherInfo = {};
-    this.weatherInfo['cityName'] = data.name;
-    this.weatherInfo['humidity'] = data.main.humidity;
-    this.weatherInfo['currentTemp'] = (data.main.temp-273.15).toFixed(0);
-    this.weatherInfo['minTemp'] = (data.main.temp_min-273.15).toFixed(0);
-    this.weatherInfo['maxTemp'] = (data.main.temp_max-273.15).toFixed(0);
-    this.weatherInfo['feelsLike'] = (data.main.feels_like-273.15).toFixed(0);
-    this.weatherInfo['iconOfWeather'] = data.weather[0].icon;
-    this.updateTypeOfWeather(this.weatherInfo['iconOfWeather']);
-
-    console.log(this.weatherInfo);
-    console.log(this.typeOfWeather);
+    this.weatherInfo.cityName = data.name;
+    this.weatherInfo.humidity = data.main.humidity;
+    this.weatherInfo.currentTemp = (data.main.temp - 273.15).toFixed(0);
+    this.weatherInfo.minTemp = (data.main.temp_min - 273.15).toFixed(0);
+    this.weatherInfo.maxTemp = (data.main.temp_max - 273.15).toFixed(0);
+    this.weatherInfo.feelsLike = (data.main.feels_like - 273.15).toFixed(0);
+    this.weatherInfo.iconOfWeather = data.weather[0].icon;
+    this.updateTypeOfWeather(this.weatherInfo.iconOfWeather);
   }
 
   updateTypeOfWeather(iconOfWeather: string){
-    if(iconOfWeather=='01d' || iconOfWeather=='01n'){
+    if (iconOfWeather === '01d' || iconOfWeather === '01n'){
       this.typeOfWeather = 'Sunny';
       return;
     }
-    if(iconOfWeather=='02d' || iconOfWeather=='03d' || iconOfWeather=='04d' || iconOfWeather=='04n'){
+    if (iconOfWeather === '02d' || iconOfWeather === '03d' || iconOfWeather === '04d' || iconOfWeather === '04n'){
       this.typeOfWeather = 'Cloudy';
       return;
     }
-    if(iconOfWeather=='09d' || iconOfWeather=='09n' || iconOfWeather=='10d' || iconOfWeather=='10n' || iconOfWeather=='11d' || iconOfWeather=='11n'){
+    if (iconOfWeather === '09d' || iconOfWeather === '09n' || iconOfWeather === '10d'
+      || iconOfWeather === '10n' || iconOfWeather === '11d' || iconOfWeather === '11n'){
       this.typeOfWeather = 'Rainy';
       return;
     }
-    if(iconOfWeather=='50d' || iconOfWeather=='50n'){
+    if (iconOfWeather === '50d' || iconOfWeather === '50n'){
       this.typeOfWeather = 'Windy';
       return;
     }
@@ -89,11 +87,12 @@ export class PanelComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       try{
-        result.length;
+        console.log(result.length);
+        console.clear();
         this.getWeatherData(result, this.apiKey, true);
         this.cityName = result;
-        let updateBroadcast = interval(20000);
-        this.subscription = updateBroadcast.subscribe(res=>{
+        const updateBroadcast = interval(20000);
+        this.subscription = updateBroadcast.subscribe(res => {
           this.tryToUpdate();
         });
       } catch (e) {
@@ -109,7 +108,7 @@ export class PanelComponent implements OnInit {
 
 
 @Component({
-  selector: 'choose-city-dialog',
+  selector: 'app-choose-city-dialog',
   templateUrl: './choose-city-dialog.component.html',
 })
 export class ChooseCityDialogComponent {
@@ -124,7 +123,7 @@ export class ChooseCityDialogComponent {
 }
 
 @Component({
-  selector: 'error-dialog',
+  selector: 'app-error-dialog',
   templateUrl: './error-dialog.component.html',
 })
 export class ErrorDialogComponent {}
