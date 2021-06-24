@@ -28,7 +28,8 @@ export class PanelComponent implements OnInit {
       if (isNotUpdating) {
         this.openErrorDialog();
       }
-      // console.clear();
+
+      console.clear();
     });
   }
 
@@ -37,8 +38,7 @@ export class PanelComponent implements OnInit {
       try{
         this.getWeatherData(this.cityName, this.apiKey, false);
       } catch (e) {
-        console.log(e);
-        // console.clear();
+        console.clear();
       }
     }
   }
@@ -95,8 +95,7 @@ export class PanelComponent implements OnInit {
           this.tryToUpdate();
         });
       } catch (e) {
-        console.log(e);
-        // console.clear();
+        console.clear();
       }
     });
   }

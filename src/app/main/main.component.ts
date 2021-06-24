@@ -15,7 +15,6 @@ export class MainComponent implements OnInit {
   ngOnInit(): void { }
   onAddClick() {
     this.listOfPanels.push(1);
-    console.log(this.listOfPanels);
   }
 
   onRemoveClick() {
