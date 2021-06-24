@@ -1,0 +1,15 @@
+.add-remove-btns {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  margin: 1em;
+  width: calc(100% - 2em);
+  bottom: 0;
+  z-index: 2;
+}
+
+button {
+  outline: none;
+  box-shadow: 1px 1px 5px grey;
+}

@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {interval, Subscription} from 'rxjs';
+import {interval, Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-panel',
@@ -21,28 +21,29 @@ export class PanelComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  getWeatherData(city: string, apiKey: string, isNotUpdating: boolean){
+  getWeatherData(city: string, apiKey: string, isNotUpdating: boolean) {
     this.http.get(this.url.concat(`q=${city}&appid=${apiKey}`)).subscribe(res => {
       this.fetchInfoFromData(res);
     }, error => {
-      if (isNotUpdating){
+      if (isNotUpdating) {
         this.openErrorDialog();
       }
-      console.clear();
+      // console.clear();
     });
   }
 
-  tryToUpdate(){
-    if (this.weatherInfo !== undefined){
+  tryToUpdate() {
+    if (this.weatherInfo !== undefined) {
       try{
         this.getWeatherData(this.cityName, this.apiKey, false);
       } catch (e) {
-        console.clear();
+        console.log(e);
+        // console.clear();
       }
     }
   }
 
-  fetchInfoFromData(data){
+  fetchInfoFromData(data) {
     this.weatherInfo = {};
     this.weatherInfo.cityName = data.name;
     this.weatherInfo.humidity = data.main.humidity;
@@ -54,41 +55,39 @@ export class PanelComponent implements OnInit {
     this.updateTypeOfWeather(this.weatherInfo.iconOfWeather);
   }
 
-  updateTypeOfWeather(iconOfWeather: string){
-    if (iconOfWeather === '01d' || iconOfWeather === '01n'){
+  updateTypeOfWeather(iconOfWeather: string) {
+    if (iconOfWeather === '01d' || iconOfWeather === '01n') {
       this.typeOfWeather = 'Sunny';
       return;
     }
-    if (iconOfWeather === '02d' || iconOfWeather === '03d' || iconOfWeather === '04d' || iconOfWeather === '04n'){
+    if (iconOfWeather === '02d' || iconOfWeather === '03d' || iconOfWeather === '04d' || iconOfWeather === '04n') {
       this.typeOfWeather = 'Cloudy';
       return;
     }
     if (iconOfWeather === '09d' || iconOfWeather === '09n' || iconOfWeather === '10d'
-      || iconOfWeather === '10n' || iconOfWeather === '11d' || iconOfWeather === '11n'){
+      || iconOfWeather === '10n' || iconOfWeather === '11d' || iconOfWeather === '11n') {
       this.typeOfWeather = 'Rainy';
       return;
     }
-    if (iconOfWeather === '50d' || iconOfWeather === '50n'){
+    if (iconOfWeather === '50d' || iconOfWeather === '50n') {
       this.typeOfWeather = 'Windy';
       return;
     }
     this.typeOfWeather = 'Unknown';
   }
 
-  closeClicked(){
+  closeClicked() {
     this.subscription.unsubscribe();
     this.weatherInfo = undefined;
     this.cityName = '';
   }
 
-  openChooseCityDialog(){
+  openChooseCityDialog() {
     const dialogRef = this.dialog.open(ChooseCityDialogComponent, {
       data: this.cityName
     });
     dialogRef.afterClosed().subscribe(result => {
       try{
-        console.log(result.length);
-        console.clear();
         this.getWeatherData(result, this.apiKey, true);
         this.cityName = result;
         const updateBroadcast = interval(20000);
@@ -96,12 +95,13 @@ export class PanelComponent implements OnInit {
           this.tryToUpdate();
         });
       } catch (e) {
-        console.clear();
+        console.log(e);
+        // console.clear();
       }
     });
   }
 
-  openErrorDialog(){
+  openErrorDialog() {
     this.dialog.open(ErrorDialogComponent);
   }
 }
